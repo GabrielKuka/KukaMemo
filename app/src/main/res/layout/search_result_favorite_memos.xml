@@ -1,0 +1,20 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.katana.memo.memo.Fragments.FavoriteMemoResults">
+
+    <TextView
+        android:id="@+id/noFavoriteMemosTextViewLabelId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/noMemosFound"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.ListViewCompat
+        android:id="@+id/favoriteMemosResultId"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>
