@@ -600,6 +600,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public String getFavoriteMemoLocation(String title){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT " + KEY_LOCATION + " FROM " + TABLE_MEMO + " WHERE " + KEY_LOCATION + " = 1 AND " + KEY_TITLE + " = \"" + title + "\";";
+
+        Cursor c = db.rawQuery(query, null);
+
+        if(c.getCount() > 0 && c.moveToFirst() && !c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION))).equals("No location")){
+
+            String location = c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION)));
+
+            db.close();
+
+            return location;
+
+        }else {
+            return "No location";
+        }
+
+
+    }
+
     public String getFavoriteMemoBody(String title) {
         SQLiteDatabase db = getReadableDatabase();
 

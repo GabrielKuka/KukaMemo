@@ -69,6 +69,7 @@ public class FavoriteMemoResults extends Fragment implements AdapterView.OnItemC
         intent.putExtra("title", title);
         intent.putExtra("body", dbHelper.getFavoriteMemoBody(title));
         intent.putExtra("date", dbHelper.getFavoriteMemoDate(title));
+        intent.putExtra("location", dbHelper.getFavoriteMemoLocation(title));
 
         startActivity(intent);
     }

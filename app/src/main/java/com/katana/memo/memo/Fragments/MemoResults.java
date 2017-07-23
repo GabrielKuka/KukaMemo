@@ -67,6 +67,7 @@ public class MemoResults extends Fragment implements AdapterView.OnItemClickList
         intent.putExtra("title", title);
         intent.putExtra("body", dbHelper.getSpecificMemoBody(id));
         intent.putExtra("date", dbHelper.getSpecificMemoDate(id));
+        intent.putExtra("location", dbHelper.getSpecificLocation(id));
 
         startActivity(intent);
     }
