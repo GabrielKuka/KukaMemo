@@ -15,14 +15,15 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/appToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorAccent"
-        android:elevation="4dp"
-        android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/appToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorAccent"
+            android:elevation="4dp"
+            android:theme="@style/ToolbarTheme"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
 
     </android.support.design.widget.AppBarLayout>
 
@@ -40,10 +41,10 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:src="@drawable/add_icon"
-        fab:fab_type="normal"
         fab:fab_colorNormal="@color/colorAccent"
         fab:fab_colorPressed="@color/colorPrimary"
-        fab:fab_colorRipple="@color/colorPrimaryDark" />
+        fab:fab_colorRipple="@color/colorPrimaryDark"
+        fab:fab_type="normal" />
 
     <com.github.fabtransitionactivity.SheetLayout
         android:id="@+id/bottom_sheet"
@@ -57,10 +58,10 @@
     <br.com.mauker.materialsearchview.MaterialSearchView
         android:id="@+id/search_view"
         style="@style/MaterialSearchViewStyle"
-        android:elevation="10dp"
-        app:elevation="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        app:elevation="10dp" />
 
 
 </android.support.design.widget.CoordinatorLayout>

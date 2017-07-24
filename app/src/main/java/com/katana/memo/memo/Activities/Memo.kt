@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.AppCompatTextView
+import android.support.v7.widget.ShareActionProvider
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -20,6 +21,8 @@ import com.sromku.simple.storage.SimpleStorage
 import com.sromku.simple.storage.Storage
 import kotlinx.android.synthetic.main.memo_activity.*
 import java.io.IOException
+
+
 
 class Memo : AppCompatActivity() {
 
@@ -36,6 +39,8 @@ class Memo : AppCompatActivity() {
     val a: Activity = this
     var mediaPlayer: MediaPlayer? = null
     var audioIcons: ArrayList<ImageView> = ArrayList()
+
+    lateinit var shareActionProvider: ShareActionProvider
 
     lateinit var getImageNotes: AsyncTask<Void, Void, Void>
     lateinit var getAudioNotes: AsyncTask<Void, Void, Void>
@@ -91,8 +96,9 @@ class Memo : AppCompatActivity() {
     }
 
 
-    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: android.view.Menu): Boolean {
         menuInflater.inflate(R.menu.memo_toolbar_items, menu)
+
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -115,6 +121,18 @@ class Memo : AppCompatActivity() {
 
                 return true
             }
+
+            R.id.shareButton -> {
+
+                val sharingIntent = Intent(Intent.ACTION_SEND)
+                sharingIntent.type = "text/plain"
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, memoTitle + "\n" + memoBody)
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, memoTitle)
+                startActivity(Intent.createChooser(sharingIntent, "Share using"))
+
+                return true
+            }
+
             else -> {
                 return super.onOptionsItemSelected(item)
             }
