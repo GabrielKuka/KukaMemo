@@ -279,6 +279,12 @@ class Memo : AppCompatActivity() {
                         imageNote.setImageDrawable(dr)
                         noteImagesSection.addView(imageNote)
 
+                        imageNote.setOnClickListener {
+                            val i = Intent(a, ImagePagerView::class.java)
+                            i.putExtra("images", imagePaths)
+                            a.startActivity(i)
+                        }
+
                     }
 
                 }

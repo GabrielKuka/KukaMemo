@@ -94,8 +94,13 @@
             android:name=".Activities.Location"
             android:configChanges="orientation|screenSize" />
 
-        <activity android:name=".Activities.SearchResults"
-            android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".Activities.SearchResults"
+            android:configChanges="orientation|screenSize" />
+
+        <activity
+            android:name=".Activities.ImagePagerView"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>
