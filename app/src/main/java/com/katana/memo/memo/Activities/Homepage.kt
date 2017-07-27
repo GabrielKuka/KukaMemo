@@ -172,10 +172,13 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
 
     }
 
-    fun addNewSuggestion(){
-        if (intent.getStringExtra("suggestion") != null) {
-            suggestedTitle = intent.getStringExtra("suggestion")
+    fun addNewSuggestion() {
+        AsyncTask.execute {
+            if (intent.getStringExtra("suggestion") != null) {
+                suggestedTitle = intent.getStringExtra("suggestion")
+            }
         }
+
     }
 
     fun checkFolders() {

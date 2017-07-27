@@ -39,7 +39,7 @@ import java.util.*
 
 class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
-    private val TAG: String = "CreateNoteActivity"
+    //private val TAG: String = "CreateNoteActivity"
 
     lateinit var dbHelper: DatabaseHelper
     lateinit var fabHelper: FabHelper
@@ -88,6 +88,7 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
     fun disableBackground() {
         memoTitle.isEnabled = false
         memoBody.isEnabled = false
+        isBlockedScrollView = true
     }
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -105,21 +106,7 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
         storage = SimpleStorage.getInternalStorage(this)
 
-
-        if (intent.extras != null) {
-            recTitle = intent.getStringExtra("title")
-            recBody = intent.getStringExtra("body")
-            recId = intent.getIntExtra("id", -2)
-            memoLocation = intent.getStringExtra("location")
-        }
-
-        if (intent.getStringArrayListExtra("imagePaths") != null) {
-            imagePaths = intent.getStringArrayListExtra("imagePaths")
-        }
-
-        if (intent.getStringArrayListExtra("audioPaths") != null) {
-            audioPaths = intent.getStringArrayListExtra("audioPaths")
-        }
+        getDataFromIntent()
 
         for (path in imagePaths) {
             Log.d("Image_item:", path)
@@ -136,6 +123,26 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
         addAudiosToScrollView()
 
         addLocationToScrollView(memoLocation)
+
+    }
+
+    fun getDataFromIntent() {
+
+
+        if (intent.extras != null) {
+            recTitle = intent.getStringExtra("title")
+            recBody = intent.getStringExtra("body")
+            recId = intent.getIntExtra("id", -2)
+            memoLocation = intent.getStringExtra("location")
+        }
+
+        if (intent.getStringArrayListExtra("imagePaths") != null) {
+            imagePaths = intent.getStringArrayListExtra("imagePaths")
+        }
+
+        if (intent.getStringArrayListExtra("audioPaths") != null) {
+            audioPaths = intent.getStringArrayListExtra("audioPaths")
+        }
 
     }
 
@@ -207,8 +214,12 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
     fun deleteSpecificAudio(path: String) {
         if (path != "") {
             try {
-                storage.deleteFile("Audios", path)
-                audioPaths.remove(path)
+
+                AsyncTask.execute {
+                    storage.deleteFile("Audios", path)
+                    audioPaths.remove(path)
+                }
+
                 MyDynamicToast.informationMessage(this, path + " deleted.")
 
             } catch(e: Exception) {
@@ -220,8 +231,11 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
     fun deleteSpecificPhoto(path: String) {
         if (path != "") {
             try {
-                storage.deleteFile("Images", path)
-                imagePaths.remove(path)
+
+                AsyncTask.execute {
+                    storage.deleteFile("Images", path)
+                    imagePaths.remove(path)
+                }
 
                 MyDynamicToast.informationMessage(this, path + " deleted.")
             } catch(e: Exception) {
@@ -261,7 +275,6 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
                     addAudioToScrollView(audioPath)
 
-                    Log.d("Rec_status", "Added!")
                 }
             }
 
@@ -303,7 +316,6 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
                     val pickedImagesPaths = ArrayList<String>()
 
                     for (item: Media in results) {
-                        Log.d("Cro_results", item.imagePath)
                         notePickedImages.add(decodeSampledBitmapFromFile(item.imagePath, 300, 300))
                         pickedImagesPaths.add((item.imagePath.substring(item.imagePath.lastIndexOf("/") + 1)) + "memoAddedImage")
                     }
@@ -328,12 +340,12 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
                     alertDialogBuilder.setMessage("Do you want to delete this location?")
                             .setCancelable(false)
                             .setPositiveButton("Yes I do",
-                                    { dialog, id ->
+                                    { _, _ ->
                                         locationCardView.visibility = View.GONE
                                         memoLocation = ""
                                     })
                     alertDialogBuilder.setNegativeButton("Nope",
-                            { dialog, id ->
+                            { dialog, _ ->
                                 run {
                                     dialog.cancel()
                                 }
@@ -349,30 +361,32 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
     fun addPhotosToMemo(images: ArrayList<Bitmap?>, paths: ArrayList<String>) {
 
-        for (index in images.indices) {
-            storage.createFile("Images", paths[index], images[index])
-        }
-
-
-        for (path in paths) {
-            imagePaths.add(path)
-        }
-
-        for (img in images) {
-            noteImages.add(img)
-        }
-
-
-
-        if (originalExtImgPath != "" && originalExtImgPath != "Deleted") {
-
-            val extImg = File(originalExtImgPath)
-            if (extImg.exists()) {
-                extImg.delete()
-                originalExtImgPath = "Deleted"
+        AsyncTask.execute {
+            for (index in images.indices) {
+                storage.createFile("Images", paths[index], images[index])
             }
-        }
 
+
+            for (path in paths) {
+                imagePaths.add(path)
+            }
+
+            for (img in images) {
+                noteImages.add(img)
+            }
+
+
+
+            if (originalExtImgPath != "" && originalExtImgPath != "Deleted") {
+
+                val extImg = File(originalExtImgPath)
+                if (extImg.exists()) {
+                    extImg.delete()
+                    originalExtImgPath = "Deleted"
+                }
+            }
+
+        }
 
     }
 

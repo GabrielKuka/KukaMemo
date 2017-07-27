@@ -171,7 +171,8 @@ class RecordAudio : AppCompatActivity() {
             mediaPlayer?.setOnCompletionListener {
 
                 play_button.setText(R.string.playButton)
-                stopBlinkAnimation(play_button)
+                status_text.setText(R.string.donePlaying)
+                stopBlinkAnimation(status_text)
 
             }
             mediaPlayer?.prepare()
