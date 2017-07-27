@@ -88,9 +88,9 @@ public class FragmentImageView extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (myBitmap != null) {
-            myBitmap.recycle();
-            myBitmap = null;
-        }
+//        if (myBitmap != null) {
+//            myBitmap.recycle();
+//            myBitmap = null;
+//        }
     }
 }

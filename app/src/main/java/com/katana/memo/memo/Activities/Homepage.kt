@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.drawable.AnimationDrawable
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
@@ -99,11 +100,14 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
         setSupportActionBar(appToolbar)
         StatusBarColor.changeStatusBarColor(this)
 
+        val animationDrawable: AnimationDrawable = homepage_root_layout.background as AnimationDrawable
+        animationDrawable.setEnterFadeDuration(2000)
+        animationDrawable.setExitFadeDuration(4000)
+        animationDrawable.start()
+
         storage = SimpleStorage.getInternalStorage(this)
 
-        if (intent.getStringExtra("suggestion") != null) {
-            suggestedTitle = intent.getStringExtra("suggestion")
-        }
+        addNewSuggestion()
 
         checkFolders()
 
@@ -168,17 +172,24 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
 
     }
 
+    fun addNewSuggestion(){
+        if (intent.getStringExtra("suggestion") != null) {
+            suggestedTitle = intent.getStringExtra("suggestion")
+        }
+    }
+
     fun checkFolders() {
 
+        AsyncTask.execute {
+            if (!storage.isDirectoryExists("Images")) {
+                storage.createDirectory("Images")
+            }
 
-        if (!storage.isDirectoryExists("Images")) {
-            storage.createDirectory("Images")
+            if (!storage.isDirectoryExists("Audios")) {
+                storage.createDirectory("Audios")
+            }
+
         }
-
-        if (!storage.isDirectoryExists("Audios")) {
-            storage.createDirectory("Audios")
-        }
-
 
     }
 

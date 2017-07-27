@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_list"
+    android:id="@+id/homepage_root_layout"
     tools:context="com.katana.memo.memo.Activities.Homepage">
 
     <android.support.design.widget.AppBarLayout
