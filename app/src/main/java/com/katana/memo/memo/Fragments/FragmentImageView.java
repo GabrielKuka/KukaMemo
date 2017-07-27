@@ -1,7 +1,6 @@
 package com.katana.memo.memo.Fragments;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -66,9 +65,6 @@ public class FragmentImageView extends Fragment {
 
     public void setImageInViewPager() {
         try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-
             myBitmap = drawableToBitmap(itemData);
             if (myBitmap != null) {
                 try {
@@ -93,4 +89,5 @@ public class FragmentImageView extends Fragment {
             myBitmap = null;
         }
     }
+
 }

@@ -29,7 +29,15 @@
     <string name="noMemosFound">No memos found</string>
     <string name="noFavoriteMemosFound">No favorite memos found</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="recording">Recording…</string>
+    <string name="doneRecording">Recording is done.</string>
+
+    <string name="playingAudio">Audio is playing</string>
+    <string name="donePlaying">Audio playing is done</string>
+
+    <string name="deletedAudio">Audio is deleted.</string>
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Share">Share</string>
 </resources>

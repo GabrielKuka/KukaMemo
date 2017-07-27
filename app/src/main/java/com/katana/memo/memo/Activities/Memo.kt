@@ -272,19 +272,34 @@ class Memo : AppCompatActivity() {
                     photoSectionTitle.setText(R.string.photos)
 
                     // create images and put them the image from the phone memory
-                    for (dr in drawableImages) {
+//                    for (dr in drawableImages) {
+//
+//                        imageNote = ImageView(a)
+//                        imageNote.layoutParams = imageLayoutParams
+//                        imageNote.setImageDrawable(dr)
+//                        noteImagesSection.addView(imageNote)
+//
+//                        imageNote.setOnClickListener {
+//                            val i = Intent(a, ImagePagerView::class.java)
+//                            i.putExtra("images", imagePaths)
+//                            i.putExtra("currentImage", "")
+//                            a.startActivity(i)
+//                        }
+//
+//                    }
 
+                    for(i: Int in 0..drawableImages.size-1){
                         imageNote = ImageView(a)
                         imageNote.layoutParams = imageLayoutParams
-                        imageNote.setImageDrawable(dr)
+                        imageNote.setImageDrawable(drawableImages[i])
                         noteImagesSection.addView(imageNote)
 
                         imageNote.setOnClickListener {
-                            val i = Intent(a, ImagePagerView::class.java)
-                            i.putExtra("images", imagePaths)
-                            a.startActivity(i)
+                            val intent = Intent(a, ImagePagerView::class.java)
+                            intent.putExtra("images", imagePaths)
+                            intent.putExtra("currentImage", i)
+                            a.startActivity(intent)
                         }
-
                     }
 
                 }

@@ -50,12 +50,16 @@ public class ImagePagerView extends FragmentActivity implements
         image = new Images(images);
         itemData = image.getImageItem();
         totalImage = itemData.size();
+
+        position = getIntent().getIntExtra("currentImage", 0);
+
         setPage(position);
 
         adapter = new FragmentPagerAdapter(getSupportFragmentManager(),
                 itemData);
         viewPage.setAdapter(adapter);
         viewPage.setOnPageChangeListener(ImagePagerView.this);
+        viewPage.setCurrentItem(position);
 
         btnImagePrevious.setOnClickListener(this);
         btnImageNext.setOnClickListener(this);
@@ -102,4 +106,6 @@ public class ImagePagerView extends FragmentActivity implements
             btnImagePrevious.setVisibility(View.VISIBLE);
         }
     }
+
+
 }

@@ -11,6 +11,9 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.katana.memo.memo.R
 import com.sromku.simple.storage.SimpleStorage
 import com.sromku.simple.storage.Storage
@@ -102,6 +105,10 @@ class RecordAudio : AppCompatActivity() {
     }
 
     private fun stopRecording() {
+
+        status_text.setText(R.string.doneRecording)
+        stopBlinkAnimation(status_text)
+
         mediaRecorder?.stop()
         mediaRecorder?.release()
         mediaRecorder = null
@@ -111,6 +118,9 @@ class RecordAudio : AppCompatActivity() {
     }
 
     private fun startRecording() {
+
+        status_text.setText(R.string.recording)
+        startBlinkAnimation(status_text)
 
         val cw: ContextWrapper = ContextWrapper(this)
 
@@ -158,21 +168,41 @@ class RecordAudio : AppCompatActivity() {
         mediaPlayer = MediaPlayer()
         try {
             mediaPlayer?.setDataSource(filePath)
+            mediaPlayer?.setOnCompletionListener {
+
+                play_button.setText(R.string.playButton)
+                stopBlinkAnimation(play_button)
+
+            }
             mediaPlayer?.prepare()
             mediaPlayer?.start()
+
+            status_text.setText(R.string.playingAudio)
+            startBlinkAnimation(status_text)
+
         } catch(e: IOException) {
             Log.d("Play_error", e.message)
         }
     }
 
     private fun stopPlaying() {
+
+        status_text.setText(R.string.donePlaying)
+        stopBlinkAnimation(status_text)
+
         mediaPlayer?.release()
         mediaPlayer = null
+
+        play_button.setText(R.string.playButton)
+
     }
 
     private fun deleteAudio() {
 
+        status_text.setText(R.string.deletedAudio)
+
         delete_button.isEnabled = false
+        save_button.isEnabled = false
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -199,8 +229,18 @@ class RecordAudio : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if (storage.isFileExist("Audios", fileName)){
+        if (storage.isFileExist("Audios", fileName)) {
             storage.deleteFile("Audios", fileName)
         }
     }
+
+    fun startBlinkAnimation(v: View) {
+        val blinkAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.blink_animation)
+        v.startAnimation(blinkAnimation)
+    }
+
+    fun stopBlinkAnimation(v: View) {
+        v.clearAnimation()
+    }
+
 }
