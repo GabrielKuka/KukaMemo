@@ -51,9 +51,9 @@
     
     
     <style name="EditMemoTitle">
-        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
         <item name="android:layout_marginRight">8dp</item>
-        <item name="android:padding">15dp</item>
+        <item name="android:padding">10dp</item>
         <item name="android:background">@color/colorAccent</item>
         <item name="android:ems">10</item>
         <item name="android:hint">@string/memoTitleHint</item>

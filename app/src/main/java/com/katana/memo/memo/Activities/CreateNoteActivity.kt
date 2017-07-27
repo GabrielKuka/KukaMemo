@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -166,13 +167,18 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
             false
         }
 
-        fab.setOnClickListener(fabHelper)
+        add_data_fab.setOnClickListener(fabHelper)
         fabHelper.calculatePentagonVertices(fabHelper.radius, POSITION_CORRECTION)
-
+        animateFab(add_data_fab)
 
         // Ketu e bej nestedScrollView scrollable ose jo ne baze te vleres se variables isBlockedScrollView
         nestedScrollView.setOnTouchListener({ _, _ -> isBlockedScrollView })
 
+    }
+
+    fun animateFab(v: View){
+        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slide_up_animation)
+        v.startAnimation(anim)
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {

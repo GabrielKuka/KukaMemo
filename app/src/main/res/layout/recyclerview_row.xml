@@ -6,7 +6,7 @@
     android:layout_marginBottom="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    android:elevation="20dp"
+    android:elevation="15dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:id="@+id/edit"
             android:layout_width="@dimen/swipeWidth"
             android:layout_height="match_parent"
-            android:background="@color/swipeoption_green"
+            android:background="@drawable/option_item_edit"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical">
@@ -62,7 +62,7 @@
             android:id="@+id/delete"
             android:layout_width="@dimen/swipeWidth"
             android:layout_height="match_parent"
-            android:background="@color/swipeoption_purple"
+            android:background="@drawable/option_item_delete"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical">
@@ -103,11 +103,11 @@
         android:id="@+id/rowFG"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="@drawable/recyclerview_item"
+        android:backgroundTint="@color/white"
         android:clickable="true"
         android:elevation="4dp"
         android:focusable="true"
-        android:backgroundTint="@color/white"
         android:orientation="vertical"
         android:visibility="visible">
 

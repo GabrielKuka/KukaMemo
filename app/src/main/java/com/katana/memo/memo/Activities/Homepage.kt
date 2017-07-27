@@ -19,6 +19,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import br.com.mauker.materialsearchview.MaterialSearchView
 import com.desai.vatsal.mydynamictoast.MyDynamicToast
@@ -143,12 +144,18 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
 
         addMemoFab.setOnClickListener { bottom_sheet.expandFab() }
         addMemoFab.attachToRecyclerView(recyclerView)
+        animateFab(addMemoFab)
 
         bottom_sheet.setFab(addMemoFab)
         bottom_sheet.setFabAnimationEndListener { startActivityForResult(Intent(this, CreateNoteActivity::class.java), 1) }
 
         initializeSearchView()
 
+    }
+
+    fun animateFab(v: View){
+        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slide_right_animation)
+        v.startAnimation(anim)
     }
 
     fun initializeSearchView() {

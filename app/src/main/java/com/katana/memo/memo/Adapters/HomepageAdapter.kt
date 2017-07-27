@@ -6,17 +6,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import com.katana.memo.memo.Helper.DatabaseHelper
 import com.katana.memo.memo.Models.MemoModel
 import com.katana.memo.memo.R
 import kotlinx.android.synthetic.main.recyclerview_row.view.*
+import java.util.*
 
 
 class HomepageAdapter(context: Context, list: List<MemoModel>) : RecyclerView.Adapter<HomepageAdapter.MainViewHolder>() {
 
     var inflater: LayoutInflater = LayoutInflater.from(context)
     var modelList: ArrayList<MemoModel> = ArrayList(list)
+    var lastPosition: Int = -1
 
     companion object {
         lateinit var dbHelper: DatabaseHelper
@@ -34,9 +37,10 @@ class HomepageAdapter(context: Context, list: List<MemoModel>) : RecyclerView.Ad
         return MainViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MainViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         itemPosition = position + 1
-        holder?.bindData(modelList[position])
+        setScaleAnimation(holder.itemView, position)
+        holder.bindData(modelList[position])
     }
 
     override fun getItemCount(): Int {
@@ -94,6 +98,18 @@ class HomepageAdapter(context: Context, list: List<MemoModel>) : RecyclerView.Ad
         }
 
 
+    }
+
+    private fun setScaleAnimation(view: View, position: Int) {
+        if (position > lastPosition) {
+//            val anim = ScaleAnimation(0.5f, 1.0f, 0.5f, 1.0f, view.width / 2, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+//            anim.duration = Random().nextInt(501).toLong()
+
+            val anim = AnimationUtils.loadAnimation(c, R.anim.slide_up_animation)
+
+            view.startAnimation(anim)
+            lastPosition = position
+        }
     }
 
 }

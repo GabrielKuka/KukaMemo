@@ -73,7 +73,7 @@ class FabHelper(var a: AppCompatActivity) : View.OnClickListener {
         val isFabClicked = false
 
         when (v?.id) {
-            R.id.fab -> {
+            R.id.add_data_fab -> {
 
                 if (whichAnimation === 0) {
 
