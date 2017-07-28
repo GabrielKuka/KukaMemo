@@ -99,6 +99,7 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
     fun setUpActivity() {
         setContentView(R.layout.homepage_acitivty)
         setSupportActionBar(appToolbar)
+        appToolbar.setBackgroundResource(R.drawable.gradient_list)
         StatusBarColor.changeStatusBarColor(this)
 
         val animationDrawable: AnimationDrawable = homepage_root_layout.background as AnimationDrawable

@@ -29,6 +29,7 @@ class Favorites : AppCompatActivity(), RecyclerTouchListener.OnRowClickListener 
     fun setUpActivity() {
         setContentView(R.layout.favorites_activity)
         setSupportActionBar(favoriteNotesToolbar)
+        favoriteNotesToolbar.setBackgroundResource(R.drawable.gradient_list)
         StatusBarColor.changeStatusBarColor(this)
 
         dbHelper = DatabaseHelper(this)

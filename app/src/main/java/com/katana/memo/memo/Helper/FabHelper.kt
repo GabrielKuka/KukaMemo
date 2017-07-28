@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.Point
 import android.preference.PreferenceManager
 import android.support.constraint.ConstraintLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
@@ -201,7 +202,7 @@ class FabHelper(var a: AppCompatActivity) : View.OnClickListener {
             /**
              * Adding those buttons in acitvities layout
              */
-            (a.findViewById(R.id.activity_parent_layout) as ConstraintLayout).addView(buttons[i])
+            (a.findViewById(R.id.activity_parent_layout) as CoordinatorLayout).addView(buttons[i])
         }
     }
 
