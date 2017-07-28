@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import com.katana.memo.memo.Helper.StatusBarColor
 import com.katana.memo.memo.R
 import com.sromku.simple.storage.SimpleStorage
 import com.sromku.simple.storage.Storage
@@ -37,6 +38,8 @@ class RecordAudio : AppCompatActivity() {
     var filePath: String = ""
     var fileName: String = ""
 
+    val a: AppCompatActivity = this
+
 
     val storage: Storage = SimpleStorage.getInternalStorage(this)
 
@@ -44,7 +47,19 @@ class RecordAudio : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.record_audio_activity)
 
+        StatusBarColor.changeStatusBarColor(this)
+
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+        setUpViews()
+    }
+
+    private fun setUpViews() {
+        delete_button.visibility = View.INVISIBLE
+        save_button.visibility = View.INVISIBLE
+        play_button.visibility = View.INVISIBLE
+        record_button.visibility = View.VISIBLE
+
+        slideUpAndShowAnimation(record_button)
 
     }
 
@@ -106,6 +121,8 @@ class RecordAudio : AppCompatActivity() {
 
     private fun stopRecording() {
 
+        stopScaleAnimation(record_button)
+
         status_text.setText(R.string.doneRecording)
         stopBlinkAnimation(status_text)
 
@@ -113,11 +130,33 @@ class RecordAudio : AppCompatActivity() {
         mediaRecorder?.release()
         mediaRecorder = null
 
-        delete_button.isEnabled = true
-        save_button.isEnabled = true
+        Thread().run {
+            try {
+                Thread.sleep(400)
+            } catch(e: InterruptedException) {
+                e.printStackTrace()
+            } finally {
+
+                a.runOnUiThread {
+                    delete_button.visibility = View.VISIBLE
+                    save_button.visibility = View.VISIBLE
+                    play_button.visibility = View.VISIBLE
+
+                    slideUpAndHideAnimation(record_button)
+                    slideUpAndShowAnimation(play_button)
+                    slideUpAndShowAnimation(delete_button)
+                    slideUpAndShowAnimation(save_button)
+                }
+            }
+
+        }
+
+
     }
 
     private fun startRecording() {
+
+        startScaleAnimation(record_button)
 
         status_text.setText(R.string.recording)
         startBlinkAnimation(status_text)
@@ -173,6 +212,7 @@ class RecordAudio : AppCompatActivity() {
                 play_button.setText(R.string.playButton)
                 status_text.setText(R.string.donePlaying)
                 stopBlinkAnimation(status_text)
+                stopScaleAnimation(play_button)
 
             }
             mediaPlayer?.prepare()
@@ -180,6 +220,7 @@ class RecordAudio : AppCompatActivity() {
 
             status_text.setText(R.string.playingAudio)
             startBlinkAnimation(status_text)
+            startScaleAnimation(play_button)
 
         } catch(e: IOException) {
             Log.d("Play_error", e.message)
@@ -190,6 +231,7 @@ class RecordAudio : AppCompatActivity() {
 
         status_text.setText(R.string.donePlaying)
         stopBlinkAnimation(status_text)
+        stopScaleAnimation(play_button)
 
         mediaPlayer?.release()
         mediaPlayer = null
@@ -221,7 +263,7 @@ class RecordAudio : AppCompatActivity() {
 
     }
 
-    fun generateRandomNumber(): Int {
+    private fun generateRandomNumber(): Int {
         val rand: Random = Random()
         val number = rand.nextInt(382901380) + 1
 
@@ -235,13 +277,32 @@ class RecordAudio : AppCompatActivity() {
         }
     }
 
-    fun startBlinkAnimation(v: View) {
+    private fun startBlinkAnimation(v: View) {
         val blinkAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.blink_animation)
         v.startAnimation(blinkAnimation)
     }
 
-    fun stopBlinkAnimation(v: View) {
+    private fun stopBlinkAnimation(v: View) {
         v.clearAnimation()
+    }
+
+    private fun startScaleAnimation(v: View) {
+        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_size_animation)
+        v.startAnimation(anim)
+    }
+
+    private fun stopScaleAnimation(v: View) {
+        v.clearAnimation()
+    }
+
+    private fun slideUpAndShowAnimation(v: View) {
+        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slideup_show)
+        v.startAnimation(anim)
+    }
+
+    private fun slideUpAndHideAnimation(v: View) {
+        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slideup_hide)
+        v.startAnimation(anim)
     }
 
 }

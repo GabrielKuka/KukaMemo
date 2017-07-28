@@ -5,48 +5,66 @@
     android:layout_height="match_parent"
     tools:context="com.katana.memo.memo.Activities.RecordAudio">
 
-    <LinearLayout
-        android:id="@+id/recordButtonsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <Button
-            android:id="@+id/record_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recordButton" />
-
-        <Button
-            android:id="@+id/play_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/playButton" />
-
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/deleteButton" />
-
-        <Button
-            android:id="@+id/save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/saveButton" />
-
-    </LinearLayout>
-
     <TextView
         android:id="@+id/status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/recordButtonsLayout"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
+
+
+    <RelativeLayout
+        android:id="@+id/buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/status_text"
+        android:layout_marginTop="50dp">
+
+        <Button
+            android:id="@+id/record_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/round_button"
+            android:text="@string/recordButton"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/play_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round_button"
+            android:text="@string/playButton"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/record_button"
+            android:layout_toStartOf="@+id/record_button"
+            android:background="@drawable/round_button"
+            android:text="@string/deleteButton"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/record_button"
+            android:layout_toRightOf="@+id/record_button"
+            android:background="@drawable/round_button"
+            android:text="@string/saveButton"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
