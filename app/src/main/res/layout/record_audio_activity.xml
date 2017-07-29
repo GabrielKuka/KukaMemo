@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_list"
     tools:context="com.katana.memo.memo.Activities.RecordAudio">
 
     <TextView
@@ -10,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white" />
 
 
     <RelativeLayout
@@ -24,9 +26,9 @@
             android:id="@+id/record_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginTop="30dp"
             android:background="@drawable/round_button"
             android:text="@string/recordButton"
             android:textColor="@color/white" />
@@ -35,8 +37,8 @@
             android:id="@+id/play_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/round_button"
             android:text="@string/playButton"
             android:textColor="@color/white" />
@@ -45,8 +47,8 @@
             android:id="@+id/delete_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginRight="20dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/record_button"
             android:layout_toStartOf="@+id/record_button"
             android:background="@drawable/round_button"
@@ -57,8 +59,8 @@
             android:id="@+id/save_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
             android:layout_toEndOf="@+id/record_button"
             android:layout_toRightOf="@+id/record_button"
             android:background="@drawable/round_button"

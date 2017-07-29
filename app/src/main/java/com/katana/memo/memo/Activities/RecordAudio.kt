@@ -12,8 +12,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import com.katana.memo.memo.Helper.Animations
 import com.katana.memo.memo.Helper.StatusBarColor
 import com.katana.memo.memo.R
 import com.sromku.simple.storage.SimpleStorage
@@ -38,6 +37,9 @@ class RecordAudio : AppCompatActivity() {
     var filePath: String = ""
     var fileName: String = ""
 
+    var mStartPlaying: Boolean = true
+    var mStartRecording: Boolean = true
+
     val a: AppCompatActivity = this
 
 
@@ -46,7 +48,6 @@ class RecordAudio : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.record_audio_activity)
-
         StatusBarColor.changeStatusBarColor(this)
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
@@ -59,15 +60,14 @@ class RecordAudio : AppCompatActivity() {
         play_button.visibility = View.INVISIBLE
         record_button.visibility = View.VISIBLE
 
-        slideUpAndShowAnimation(record_button)
+        Animations.slideUpAndShowAnimation(record_button, this)
 
     }
 
     override fun onStart() {
         super.onStart()
 
-        var mStartPlaying: Boolean = true
-        var mStartRecording: Boolean = true
+
 
         play_button.setOnClickListener {
             onPlay(mStartPlaying)
@@ -121,10 +121,11 @@ class RecordAudio : AppCompatActivity() {
 
     private fun stopRecording() {
 
-        stopScaleAnimation(record_button)
+        Animations.stopScaleAnimation(record_button)
+        record_button.isEnabled = false
 
         status_text.setText(R.string.doneRecording)
-        stopBlinkAnimation(status_text)
+        Animations.stopBlinkAnimation(status_text)
 
         mediaRecorder?.stop()
         mediaRecorder?.release()
@@ -138,28 +139,30 @@ class RecordAudio : AppCompatActivity() {
             } finally {
 
                 a.runOnUiThread {
+
                     delete_button.visibility = View.VISIBLE
                     save_button.visibility = View.VISIBLE
                     play_button.visibility = View.VISIBLE
 
-                    slideUpAndHideAnimation(record_button)
-                    slideUpAndShowAnimation(play_button)
-                    slideUpAndShowAnimation(delete_button)
-                    slideUpAndShowAnimation(save_button)
+                    delete_button.isEnabled = true
+                    save_button.isEnabled = true
+
+                    Animations.slideUpAndHideAnimation(record_button, a)
+                    Animations.slideUpAndShowAnimation(play_button, a)
+                    Animations.slideUpAndShowAnimation(delete_button, a)
+                    Animations.slideUpAndShowAnimation(save_button, a)
                 }
             }
 
         }
-
-
     }
 
     private fun startRecording() {
 
-        startScaleAnimation(record_button)
+        Animations.startScaleAnimation(record_button, this)
 
         status_text.setText(R.string.recording)
-        startBlinkAnimation(status_text)
+        Animations.startBlinkAnimation(status_text, this)
 
         val cw: ContextWrapper = ContextWrapper(this)
 
@@ -180,7 +183,7 @@ class RecordAudio : AppCompatActivity() {
         try {
             mediaRecorder?.prepare()
         } catch(e: IOException) {
-            Log.d("Record_error", e.message)
+            e.printStackTrace()
         }
 
         mediaRecorder?.start()
@@ -209,43 +212,67 @@ class RecordAudio : AppCompatActivity() {
             mediaPlayer?.setDataSource(filePath)
             mediaPlayer?.setOnCompletionListener {
 
-                play_button.setText(R.string.playButton)
-                status_text.setText(R.string.donePlaying)
-                stopBlinkAnimation(status_text)
-                stopScaleAnimation(play_button)
+                //                play_button.setText(R.string.playButton)
+//                status_text.setText(R.string.donePlaying)
+//                Animations.stopBlinkAnimation(status_text)
+//                Animations.stopScaleAnimation(play_button)
+//                mStartPlaying = !mStartPlaying
+
+                stopPlaying()
+
+                mStartPlaying = !mStartPlaying
 
             }
             mediaPlayer?.prepare()
             mediaPlayer?.start()
 
             status_text.setText(R.string.playingAudio)
-            startBlinkAnimation(status_text)
-            startScaleAnimation(play_button)
+            Animations.startBlinkAnimation(status_text, this)
+            Animations.startScaleAnimation(play_button, this)
 
         } catch(e: IOException) {
-            Log.d("Play_error", e.message)
+            e.printStackTrace()
         }
     }
 
     private fun stopPlaying() {
 
         status_text.setText(R.string.donePlaying)
-        stopBlinkAnimation(status_text)
-        stopScaleAnimation(play_button)
+        play_button.setText(R.string.playButton)
+
+        Animations.stopBlinkAnimation(status_text)
+        Animations.stopScaleAnimation(play_button)
 
         mediaPlayer?.release()
         mediaPlayer = null
 
-        play_button.setText(R.string.playButton)
 
     }
 
     private fun deleteAudio() {
 
+
+        if (mediaPlayer != null && mediaPlayer?.isPlaying!!) {
+            stopPlaying()
+        }
+
         status_text.setText(R.string.deletedAudio)
 
         delete_button.isEnabled = false
         save_button.isEnabled = false
+
+        Animations.slideDownAndHideAnimation(delete_button, a)
+        Animations.slideDownAndHideAnimation(play_button, a)
+        Animations.slideDownAndHideAnimation(save_button, a)
+        Animations.slideDownAndShowAnimation(record_button, a)
+
+        delete_button.visibility = View.INVISIBLE
+        play_button.visibility = View.INVISIBLE
+        save_button.visibility = View.INVISIBLE
+        record_button.visibility = View.VISIBLE
+        record_button.isEnabled = true
+
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -275,34 +302,6 @@ class RecordAudio : AppCompatActivity() {
         if (storage.isFileExist("Audios", fileName)) {
             storage.deleteFile("Audios", fileName)
         }
-    }
-
-    private fun startBlinkAnimation(v: View) {
-        val blinkAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.blink_animation)
-        v.startAnimation(blinkAnimation)
-    }
-
-    private fun stopBlinkAnimation(v: View) {
-        v.clearAnimation()
-    }
-
-    private fun startScaleAnimation(v: View) {
-        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_size_animation)
-        v.startAnimation(anim)
-    }
-
-    private fun stopScaleAnimation(v: View) {
-        v.clearAnimation()
-    }
-
-    private fun slideUpAndShowAnimation(v: View) {
-        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slideup_show)
-        v.startAnimation(anim)
-    }
-
-    private fun slideUpAndHideAnimation(v: View) {
-        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slideup_hide)
-        v.startAnimation(anim)
     }
 
 }
