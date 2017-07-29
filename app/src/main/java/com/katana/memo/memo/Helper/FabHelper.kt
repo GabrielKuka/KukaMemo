@@ -81,7 +81,7 @@ class FabHelper(var a: AppCompatActivity) : View.OnClickListener {
                     // çaktivizo fushat dhe scrolling në background
 
                     if (a is CreateNoteActivity) {
-                        (a as CreateNoteActivity).disableBackground()
+                        (a as CreateNoteActivity).disableBackground(null)
                         (a as CreateNoteActivity).applyBlur()
                     }
                     /**

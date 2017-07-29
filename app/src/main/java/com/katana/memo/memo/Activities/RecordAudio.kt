@@ -212,12 +212,6 @@ class RecordAudio : AppCompatActivity() {
             mediaPlayer?.setDataSource(filePath)
             mediaPlayer?.setOnCompletionListener {
 
-                //                play_button.setText(R.string.playButton)
-//                status_text.setText(R.string.donePlaying)
-//                Animations.stopBlinkAnimation(status_text)
-//                Animations.stopScaleAnimation(play_button)
-//                mStartPlaying = !mStartPlaying
-
                 stopPlaying()
 
                 mStartPlaying = !mStartPlaying
@@ -255,6 +249,8 @@ class RecordAudio : AppCompatActivity() {
         if (mediaPlayer != null && mediaPlayer?.isPlaying!!) {
             stopPlaying()
         }
+
+        storage.deleteFile("Audios", fileName)
 
         status_text.setText(R.string.deletedAudio)
 

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -48,18 +48,22 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
     </style>
-    
-    
+
+
     <style name="EditMemoTitle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">8dp</item>
         <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">10dp</item>
         <item name="android:padding">10dp</item>
-        <item name="android:background">@color/colorAccent</item>
+        <item name="android:background">@drawable/memo_title_design</item>
         <item name="android:ems">10</item>
         <item name="android:hint">@string/memoTitleHint</item>
-        <item name="android:textColorHint">@color/white</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/textfield_color</item>
+        <item name="android:textColor">@color/textfield_color</item>
         <item name="android:inputType">textCapWords</item>
+        <item name="android:focusableInTouchMode">true</item>
     </style>
 
 

@@ -14,16 +14,12 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.desai.vatsal.mydynamictoast.MyDynamicToast
 import com.katana.memo.memo.Activities.CreateNoteActivity.Constants.POSITION_CORRECTION
-import com.katana.memo.memo.Helper.AppConstants
-import com.katana.memo.memo.Helper.BlurBuilder
-import com.katana.memo.memo.Helper.DatabaseHelper
-import com.katana.memo.memo.Helper.FabHelper
+import com.katana.memo.memo.Helper.*
 import com.katana.memo.memo.R
 import com.sandrios.sandriosCamera.internal.SandriosCamera
 import com.sandrios.sandriosCamera.internal.configuration.CameraConfiguration
@@ -74,6 +70,11 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
     var memoLocation: String = ""
 
+    var memoTitleDefaultXPos = 0f
+    var memoTitleDefaultYPos = 0f
+
+    var animateToCenter = true
+
     object Constants {
         const val ANIMATION_DURATION = 300
         const val NUM_OF_SIDES = 5
@@ -81,14 +82,41 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
     }
 
     fun enableBackground() {
+
+        if (memoTitle.isFocused) {
+            memoTitle.clearFocus()
+        } else if (memoBody.isFocused) {
+            memoBody.clearFocus()
+        }
+
         memoTitle.isEnabled = true
         memoBody.isEnabled = true
+
         isBlockedScrollView = false
     }
 
-    fun disableBackground() {
-        memoTitle.isEnabled = false
-        memoBody.isEnabled = false
+    fun disableBackground(view: View?) {
+
+        if (view == null) {
+            memoTitle.isEnabled = true
+            memoBody.isEnabled = true
+
+        } else if (view.id == R.id.memoTitle) {
+
+            memoBody.isEnabled = false
+            memoTitle.isEnabled = true
+
+            memoTitle.requestFocus()
+
+        } else if (view.id == R.id.memoBody) {
+
+            memoBody.isEnabled = true
+            memoTitle.isEnabled = false
+
+            memoBody.requestFocus()
+
+        }
+
         isBlockedScrollView = true
     }
 
@@ -149,8 +177,20 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
     fun setUpViews() {
 
+
+        memoTitleDefaultXPos = memoTitle.x
+        memoTitleDefaultYPos = memoTitle.y
+
         if (recTitle?.length != 0) {
             memoTitle.setText(recTitle)
+            memoTitle.setOnClickListener {
+                Animations.onAnimateEdiText(animateToCenter, textFieldsLayout, memoTitle, memoTitleDefaultXPos, memoTitleDefaultYPos)
+                animateToCenter = !animateToCenter
+                blurExceptMemoTitle()
+                disableBackground(memoTitle)
+            }
+
+
             memoBody.setText(recBody)
         }
 
@@ -169,16 +209,11 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
         add_data_fab.setOnClickListener(fabHelper)
         fabHelper.calculatePentagonVertices(fabHelper.radius, POSITION_CORRECTION)
-        animateFab(add_data_fab)
+        Animations.animateFab(add_data_fab, this)
 
         // Ketu e bej nestedScrollView scrollable ose jo ne baze te vleres se variables isBlockedScrollView
         nestedScrollView.setOnTouchListener({ _, _ -> isBlockedScrollView })
 
-    }
-
-    fun animateFab(v: View){
-        val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slide_up_animation)
-        v.startAnimation(anim)
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
@@ -209,6 +244,11 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
         if (fabHelper.isFabOpened()) {
             fabHelper.closeFab()
+        } else if (!animateToCenter) {
+            blurExceptMemoTitle()
+            Animations.onAnimateEdiText(animateToCenter, textFieldsLayout, memoTitle, memoTitleDefaultXPos, memoTitleDefaultYPos)
+            animateToCenter = !animateToCenter
+            enableBackground()
         } else {
             deleteSpecificPhoto(imagePath)
             deleteSpecificAudio(audioPath)
@@ -740,6 +780,8 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
                 memoBody.alpha = 0.1f
                 photosLinearLayoutSection.alpha = 0.1f
                 audiosLinearLayoutSection.alpha = 0.1f
+                add_data_fab.alpha = 0.1f
+                add_data_fab.isEnabled = false
 
             } else {
 
@@ -747,6 +789,8 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
                 memoBody.alpha = 1.0f
                 photosLinearLayoutSection.alpha = 1.0f
                 audiosLinearLayoutSection.alpha = 1.0f
+                add_data_fab.alpha = 1.0f
+                add_data_fab.isEnabled = true
 
                 titleNeedBlur = true
             }

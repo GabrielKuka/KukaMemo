@@ -29,16 +29,15 @@
         app:layout_constraintTop_toBottomOf="@+id/createNoteToolbar">
 
         <LinearLayout
+            android:id="@+id/textFieldsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/memoTitle"
                 style="@style/EditMemoTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/createNoteToolbar" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -135,10 +134,10 @@
                 android:visibility="gone">
 
                 <LinearLayout
-                    android:padding="50dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="50dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="wrap_content"
@@ -165,14 +164,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/fab_margin"
         android:layout_marginBottom="28dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_plus"
-        android:layout_gravity="bottom|right"
-        app:backgroundTint="@color/colorAccent"
-         />
+        app:backgroundTint="@color/colorAccent" />
 
 
 </android.support.design.widget.CoordinatorLayout>
