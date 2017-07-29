@@ -100,6 +100,7 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
         setContentView(R.layout.homepage_acitivty)
         setSupportActionBar(appToolbar)
         appToolbar.setBackgroundResource(R.drawable.gradient_list)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         StatusBarColor.changeStatusBarColor(this)
 
         val animationDrawable: AnimationDrawable = homepage_root_layout.background as AnimationDrawable
@@ -154,7 +155,7 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
 
     }
 
-    fun animateFab(v: View){
+    fun animateFab(v: View) {
         val anim = AnimationUtils.loadAnimation(this, R.anim.fab_slide_right_animation)
         v.startAnimation(anim)
     }
