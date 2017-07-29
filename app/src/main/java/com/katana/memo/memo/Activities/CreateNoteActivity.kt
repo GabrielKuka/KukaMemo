@@ -184,12 +184,16 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
         if (recTitle?.length != 0) {
             memoTitle.setText(recTitle)
             memoTitle.setOnClickListener {
-                Animations.onAnimateEdiText(animateToCenter, textFieldsLayout, memoTitle, memoTitleDefaultXPos, memoTitleDefaultYPos)
-                animateToCenter = !animateToCenter
-                blurExceptMemoTitle()
-                disableBackground(memoTitle)
             }
 
+            memoTitle.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) {
+                    Animations.onAnimateEdiText(animateToCenter, textFieldsLayout, memoTitle, memoTitleDefaultXPos, memoTitleDefaultYPos)
+                    animateToCenter = !animateToCenter
+                    blurExceptMemoTitle()
+                    disableBackground(memoTitle)
+                }
+            }
 
             memoBody.setText(recBody)
         }

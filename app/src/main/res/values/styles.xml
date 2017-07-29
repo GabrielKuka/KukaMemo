@@ -63,7 +63,7 @@
         <item name="android:textColorHint">@color/textfield_color</item>
         <item name="android:textColor">@color/textfield_color</item>
         <item name="android:inputType">textCapWords</item>
-        <item name="android:focusableInTouchMode">true</item>
+
     </style>
 
 
