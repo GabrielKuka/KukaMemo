@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -183,8 +184,6 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
         if (recTitle?.length != 0) {
             memoTitle.setText(recTitle)
-            memoTitle.setOnClickListener {
-            }
 
             memoTitle.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
@@ -192,7 +191,19 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
                     animateToCenter = !animateToCenter
                     blurExceptMemoTitle()
                     disableBackground(memoTitle)
+
                 }
+            }
+
+            memoTitle.setOnEditorActionListener { v, actionId, event ->
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    Animations.onAnimateEdiText(animateToCenter, textFieldsLayout, memoTitle, memoTitleDefaultXPos, memoTitleDefaultYPos)
+                    animateToCenter = !animateToCenter
+                    blurExceptMemoTitle()
+                    disableBackground(memoTitle)
+                }
+
+                true
             }
 
             memoBody.setText(recBody)

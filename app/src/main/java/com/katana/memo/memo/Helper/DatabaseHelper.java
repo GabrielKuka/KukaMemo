@@ -251,7 +251,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c.getCount() > 0 && c.moveToFirst()) {
             String title = c.getString(c.getColumnIndex(String.valueOf(KEY_TITLE)));
 
-            db.close();
             return title;
         } else {
             db.close();
