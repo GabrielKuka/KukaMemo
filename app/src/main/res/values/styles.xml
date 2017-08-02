@@ -65,7 +65,7 @@
         <item name="android:textColorHint">@color/textfield_color</item>
         <item name="android:textColor">@color/textfield_color</item>
         <item name="android:inputType">textCapWords</item>
-
+        <item name="android:imeOptions">actionDone</item>
     </style>
 
     <style name="add_data_fab">

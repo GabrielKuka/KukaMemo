@@ -521,6 +521,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
+        db.close();
+
     }
 
     public boolean checkIfFavorite(int Id) {

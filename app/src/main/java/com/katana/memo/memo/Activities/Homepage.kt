@@ -456,7 +456,7 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
     }
 
     override fun onIndependentViewClicked(independentViewID: Int, position: Int) {
-        AsyncTask.execute { dbHelper.favoriteMemo(position + 1) }
+        dbHelper.favoriteMemo(position + 1)
 
         mAdapter.reloadRecyclerView(getData())
 

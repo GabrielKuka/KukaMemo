@@ -1,5 +1,6 @@
 package com.katana.memo.memo.Activities
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -15,6 +16,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -196,11 +198,13 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
             }
 
             memoTitle.setOnEditorActionListener { v, actionId, event ->
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    blurExceptMemoTitle()
                     Animations.onAnimateEdiText(animateToCenter, textFieldsLayout, memoTitle, memoTitleDefaultXPos, memoTitleDefaultYPos)
                     animateToCenter = !animateToCenter
-                    blurExceptMemoTitle()
-                    disableBackground(memoTitle)
+                    enableBackground()
+                    val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(memoTitle.windowToken, 0)
                 }
 
                 true
