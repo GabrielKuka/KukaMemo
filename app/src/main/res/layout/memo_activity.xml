@@ -44,49 +44,18 @@
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/memoTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="24dp"
-                android:background="@color/white"
-                android:ems="10"
-                android:hint="@string/memoTitleHint"
-                android:inputType="textCapWords"
-                android:maxLength="150"
-                android:padding="15dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
+                style="@style/memoTitle"
                 app:layout_constraintHorizontal_bias="0.058"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/memo_toolbar" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DADADA" />
+            <View style="@style/lineSeparator" />
 
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/memoBody"
-                android:layout_width="345dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:ems="10"
-                android:gravity="top"
-                android:hint="@string/memoBodyHint"
-                android:inputType="textMultiLine|textCapSentences"
-                android:padding="10dp"
-                android:shadowColor="#DADADA"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
+                style="@style/memoBody"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.521"
                 app:layout_constraintLeft_toLeftOf="parent"

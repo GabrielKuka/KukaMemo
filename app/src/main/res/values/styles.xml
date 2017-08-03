@@ -82,4 +82,46 @@
     </style>
 
 
+    <style name="memoTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:ems">10</item>
+        <item name="android:hint">@string/memoTitleHint</item>
+        <item name="android:inputType">textCapWords</item>
+        <item name="android:maxLength">150</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+    </style>
+
+    <style name="lineSeparator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#DADADA</item>
+    </style>
+
+    <style name="memoBody">
+        <item name="android:layout_width">345dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:ems">10</item>
+        <item name="android:gravity">top</item>
+        <item name="android:hint">@string/memoBodyHint</item>
+        <item name="android:inputType">textMultiLine|textCapSentences</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:shadowColor">#DADADA</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+    </style>
+
 </resources>

@@ -1,10 +1,12 @@
 package com.katana.memo.memo.Activities
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.*
 import android.os.AsyncTask
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -48,7 +50,24 @@ class DrawImage : AppCompatActivity(), View.OnClickListener {
 
 
     override fun onBackPressed() {
-        super.onBackPressed()
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setMessage("Save the drawing?")
+        alertDialogBuilder.setCancelable(true)
+        alertDialogBuilder.setNegativeButton("Nope", DialogInterface.OnClickListener { dialog, id ->
+            run {
+                dialog.cancel()
+                super.onBackPressed()
+            }
+        })
+        alertDialogBuilder.setPositiveButton("Save", DialogInterface.OnClickListener { dialog, id ->
+            run {
+                SaveDrawing().execute()
+            }
+        })
+        val dialog = alertDialogBuilder.create()
+        dialog.show()
+
     }
 
 
