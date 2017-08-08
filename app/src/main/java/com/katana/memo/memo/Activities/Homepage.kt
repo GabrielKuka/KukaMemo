@@ -1,11 +1,14 @@
 package com.katana.memo.memo.Activities
 
 import android.Manifest
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.ColorDrawable
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
@@ -19,8 +22,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
+import android.widget.TextView
 import br.com.mauker.materialsearchview.MaterialSearchView
 import com.desai.vatsal.mydynamictoast.MyDynamicToast
 import com.katana.memo.memo.Adapters.HomepageAdapter
@@ -35,7 +40,7 @@ import com.sromku.simple.storage.helpers.OrderType
 import kotlinx.android.synthetic.main.homepage_acitivty.*
 import java.io.File
 
-class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickListener, RecyclerTouchListener.OnRowClickListener, AdapterView.OnItemClickListener, MaterialSearchView.OnQueryTextListener {
+class Homepage : AppCompatActivity(), RecyclerTouchListener.OnRowLongClickListener, RecyclerTouchListener.OnSwipeOptionsClickListener, RecyclerTouchListener.OnRowClickListener, AdapterView.OnItemClickListener, MaterialSearchView.OnQueryTextListener {
 
     val TAG: String = "HomePage"
     lateinit var mAdapter: HomepageAdapter
@@ -43,6 +48,7 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
     lateinit var dbHelper: DatabaseHelper
     lateinit var storage: Storage
     lateinit var suggestedTitle: String
+    lateinit var hoverMemoDialog: Dialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,6 +100,12 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
     override fun onPause() {
         super.onPause()
         recyclerView.removeOnItemTouchListener(onTouchListener)
+        dbHelper.close()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dbHelper.close()
     }
 
     fun setUpActivity() {
@@ -127,6 +139,8 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
 
     fun setUpViews() {
 
+        hoverMemoDialog = Dialog(this)
+
         mAdapter = HomepageAdapter(this, getData())
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -143,6 +157,9 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
                 .setSwipeable(true)
                 .setSwipeOptionViews(R.id.edit, R.id.delete)
                 .setSwipeable(R.id.rowFG, R.id.rowBG, this)
+                .setLongClickable(true)
+                .setLongClickable(true, this)
+
 
         addMemoFab.setOnClickListener { bottom_sheet.expandFab() }
         addMemoFab.attachToRecyclerView(recyclerView)
@@ -208,15 +225,15 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
     fun getData(): ArrayList<MemoModel> {
         val list = ArrayList<MemoModel>(dbHelper.theAmountOfMemos)
 
-        (1..dbHelper.theAmountOfMemos)
-                .filter { dbHelper.getSpecificMemoTitle(it) != "Title not found!" }
-                .mapTo(list) { MemoModel(dbHelper.getSpecificMemoTitle(it), dbHelper.getSpecificMemoBody(it), it) }
+//        (1..dbHelper.theAmountOfMemos)
+//                .filter { dbHelper.getSpecificMemoTitle(it) != "Title not found!" }
+//                .mapTo(list) { MemoModel(dbHelper.getSpecificMemoTitle(it), dbHelper.getSpecificMemoBody(it), it) }
+//
 
-
-//        for(i: Int in dbHelper.theAmountOfMemos downTo 1){
-//            list.add(MemoModel(dbHelper.getSpecificMemoTitle(i), dbHelper.getSpecificMemoBody(i), i))
-//            Log.d("items", dbHelper.getSpecificMemoTitle(i))
-//        }
+        for (i: Int in dbHelper.theAmountOfMemos downTo 1) {
+            list.add(MemoModel(dbHelper.getSpecificMemoTitle(i), dbHelper.getSpecificMemoBody(i), i))
+            Log.d("items", dbHelper.getSpecificMemoTitle(i))
+        }
 
 
         return list
@@ -255,13 +272,15 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
     }
 
     override fun onBackPressed() {
-        if (search_view.isOpen) {
+
+        if (hoverMemoDialog.isShowing) {
+            hoverMemoDialog.dismiss()
+        } else if (search_view.isOpen) {
             search_view.closeSearch()
-        } else
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                this.finishAffinity()
-                super.onBackPressed()
-            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            this.finishAffinity()
+            super.onBackPressed()
+        }
     }
 
     fun deleteSpecificPhoto(paths: ArrayList<String>) {
@@ -442,44 +461,67 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
     // Recyclerview eventlisteners
 
     override fun onRowClicked(position: Int) {
+        val itemId = dbHelper.theAmountOfMemos - position
         AsyncTask.execute {
             val intent = Intent(this, Memo::class.java)
-            intent.putExtra("id", (position + 1))
-            intent.putExtra("title", dbHelper.getSpecificMemoTitle(position + 1))
-            intent.putExtra("body", dbHelper.getSpecificMemoBody(position + 1))
-            intent.putExtra("date", dbHelper.getSpecificMemoDate(position + 1))
-            intent.putExtra("location", dbHelper.getSpecificLocation(position + 1))
+            intent.putExtra("id", (itemId))
+            intent.putExtra("title", dbHelper.getSpecificMemoTitle(itemId))
+            intent.putExtra("body", dbHelper.getSpecificMemoBody(itemId))
+            intent.putExtra("date", dbHelper.getSpecificMemoDate(itemId))
+            intent.putExtra("location", dbHelper.getSpecificLocation(itemId))
 
             startActivity(intent)
         }
 
     }
 
+    override fun onRowLongClicked(position: Int) {
+
+        val itemId = dbHelper.theAmountOfMemos - position
+
+        MyDynamicToast.informationMessage(this, "Triggered")
+        hoverMemoDialog = Dialog(this)
+        hoverMemoDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        hoverMemoDialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        hoverMemoDialog.setContentView(R.layout.hover_memo)
+
+        val hoverTitle: TextView = hoverMemoDialog.findViewById(R.id.hoverMemoTitle) as TextView
+        val hoverBody: TextView = hoverMemoDialog.findViewById(R.id.hoverMemoBody) as TextView
+
+        hoverTitle.text = dbHelper.getSpecificMemoTitle(itemId)
+        hoverBody.text = dbHelper.getSpecificMemoBody(itemId)
+        hoverMemoDialog.show()
+    }
+
     override fun onIndependentViewClicked(independentViewID: Int, position: Int) {
-        dbHelper.favoriteMemo(position + 1)
+        val itemId = dbHelper.theAmountOfMemos - position
+        dbHelper.favoriteMemo(itemId)
 
         mAdapter.reloadRecyclerView(getData())
 
     }
 
     override fun onSwipeOptionClicked(viewID: Int, position: Int) {
+
+        val itemId = dbHelper.theAmountOfMemos - position
+
         when (viewID) {
 
             R.id.edit -> {
 
                 AsyncTask.execute {
                     intent = Intent(this, CreateNoteActivity::class.java)
-                    intent.putExtra("id", position + 1)
-                    intent.putExtra("title", dbHelper.getSpecificMemoTitle(position + 1))
-                    intent.putExtra("body", dbHelper.getSpecificMemoBody(position + 1))
-                    intent.putExtra("location", dbHelper.getSpecificLocation(position + 1))
+                    intent.putExtra("id", itemId)
+                    intent.putExtra("title", dbHelper.getSpecificMemoTitle(itemId))
+                    intent.putExtra("body", dbHelper.getSpecificMemoBody(itemId))
+                    intent.putExtra("location", dbHelper.getSpecificLocation(itemId))
 
-                    if (dbHelper.getSpecificAudioPaths(position + 1)[0] != "No audios found") {
-                        intent.putExtra("audioPaths", dbHelper.getSpecificAudioPaths(position + 1))
+                    if (dbHelper.getSpecificAudioPaths(itemId)[0] != "No audios found") {
+                        intent.putExtra("audioPaths", dbHelper.getSpecificAudioPaths(itemId))
                     }
 
-                    if (dbHelper.getSpecificImagePaths(position + 1)[0] != "No images found") {
-                        intent.putExtra("imagePaths", dbHelper.getSpecificImagePaths(position + 1))
+                    if (dbHelper.getSpecificImagePaths(itemId)[0] != "No images found") {
+                        intent.putExtra("imagePaths", dbHelper.getSpecificImagePaths(itemId))
                     }
 
                     startActivity(intent)
@@ -490,13 +532,13 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickL
 
             R.id.delete -> {
 
-                AsyncTask.execute {
-                    search_view.removeSuggestion(dbHelper.getSpecificMemoTitle(position + 1))
-                }
-                deleteSpecificPhoto(dbHelper.getSpecificImagePaths(position + 1))
-                deleteSpecificAudio(dbHelper.getSpecificAudioPaths(position + 1))
 
-                dbHelper.deleteSpecificMemo(position + 1)
+                search_view.removeSuggestion(dbHelper.getSpecificMemoTitle(dbHelper.theAmountOfMemos - position))
+
+                deleteSpecificPhoto(dbHelper.getSpecificImagePaths(itemId))
+                deleteSpecificAudio(dbHelper.getSpecificAudioPaths(itemId))
+
+                dbHelper.deleteSpecificMemo(itemId)
                 mAdapter.reloadRecyclerView(getData())
             }
         }

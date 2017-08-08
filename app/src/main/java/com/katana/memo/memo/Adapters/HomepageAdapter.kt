@@ -38,7 +38,7 @@ class HomepageAdapter(context: Context, list: List<MemoModel>) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        itemPosition = position + 1
+        itemPosition = dbHelper.theAmountOfMemos - position
         setScaleAnimation(holder.itemView, position)
         holder.bindData(modelList[position])
     }
@@ -59,7 +59,6 @@ class HomepageAdapter(context: Context, list: List<MemoModel>) : RecyclerView.Ad
         var memoTitle: AppCompatTextView = itemView.findViewById(R.id.memoTitleTextView) as AppCompatTextView
         var memoBody: AppCompatTextView = itemView.findViewById(R.id.memoBodyTextView) as AppCompatTextView
         var favoriteButton: ImageButton = itemView.findViewById(R.id.favoriteButton) as ImageButton
-
 
         fun bindData(memoModel: MemoModel) {
             memoTitle.text = memoModel.memoTitle

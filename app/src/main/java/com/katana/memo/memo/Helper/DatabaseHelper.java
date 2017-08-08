@@ -93,9 +93,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_FAVORITE, 0);
         values.put(KEY_DATE, getDateTime());
 
-        if(location.length() > 0){
+        if (location.length() > 0) {
             values.put(KEY_LOCATION, location);
-        }else {
+        } else {
             values.put(KEY_LOCATION, "No location");
         }
 
@@ -138,9 +138,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(KEY_BODY, body);
         cv.put(KEY_ID, Id);
 
-        if(location.length() > 0){
+        if (location.length() > 0) {
             cv.put(KEY_LOCATION, location);
-        }else {
+        } else {
             cv.put(KEY_LOCATION, "No location");
         }
 
@@ -249,11 +249,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
 
         if (c.getCount() > 0 && c.moveToFirst()) {
-            String title = c.getString(c.getColumnIndex(String.valueOf(KEY_TITLE)));
 
-            return title;
+            return c.getString(c.getColumnIndex(String.valueOf(KEY_TITLE)));
         } else {
-            db.close();
+            c.close();
             return "Title not found!";
         }
 
@@ -314,21 +313,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public String getSpecificLocation(int Id){
+    public String getSpecificLocation(int Id) {
         SQLiteDatabase db = getReadableDatabase();
 
         String query = "SELECT " + KEY_LOCATION + " FROM " + TABLE_MEMO + " WHERE " + KEY_ID + " = " + Id + ";";
 
         Cursor c = db.rawQuery(query, null);
 
-        if(c.getCount() > 0 && c.moveToFirst() && !c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION))).equals("No location")){
+        if (c.getCount() > 0 && c.moveToFirst() && !c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION))).equals("No location")) {
 
             String location = c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION)));
 
             db.close();
 
             return location;
-        }else {
+        } else {
             db.close();
             return "No location found";
         }
@@ -342,7 +341,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (number > 0) {
             return number;
         } else {
-            db.close();
             c.close();
             return 0;
         }
@@ -374,23 +372,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         } finally {
             if (Id != prevAmountOfMemos || this.getTheAmountOfMemos() != 0) {
-
                 ContentValues contentValues = new ContentValues();
 
-                for (int i = (Id + 1); i < ((this.getTheAmountOfMemos() - (Id - 1)) + (Id + 1)); i++) {
-                    contentValues.put(KEY_ID, (i - 1));
-                    try {
-                        db.update(TABLE_MEMO, contentValues, KEY_ID + " =? ", new String[]{"" + i});
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+//                for (int i = (Id + 1); i < ((this.getTheAmountOfMemos() - (Id - 1)) + (Id + 1)); i++) {
+//                    contentValues.put(KEY_ID, (i - 1));
+//                    try {
+//                        db.update(TABLE_MEMO, contentValues, KEY_ID + " =? ", new String[]{"" + i});
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                if (Id != 1) {
+                    for (int i = (Id + 1); i < ((this.getTheAmountOfMemos() - (Id - 1)) + (Id + 1)); i++) {
+                        contentValues.put(KEY_ID, (i - 1));
+                        try {
+                            db.update(TABLE_MEMO, contentValues, KEY_ID + " =? ", new String[]{"" + i});
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    for (int i = 2; i <= prevAmountOfMemos; i++) {
+                        contentValues.put(KEY_ID, (i - 1));
+                        try {
+                            db.update(TABLE_MEMO, contentValues, KEY_ID + " =? ", new String[]{"" + i});
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-
 
             }
         }
 
-        db.close();
     }
 
     public boolean checkMemoForPhoto(int Id) {
@@ -417,7 +431,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         c.close();
-        db.close();
+
 
         return hasPhoto;
 
@@ -448,7 +462,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         c.close();
-        db.close();
+
 
         return hasDrawing;
     }
@@ -474,7 +488,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         c.close();
-        db.close();
+
 
         return hasAddedImages;
     }
@@ -521,7 +535,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        db.close();
 
     }
 
@@ -540,7 +553,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (number > 0) {
             return number;
         } else {
-            //     c.close();
             return 0;
         }
     }
@@ -560,7 +572,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         c.close();
-        db.close();
+
 
         return list;
     }
@@ -583,7 +595,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         c.close();
-        db.close();
+
 
         return list;
     }
@@ -601,21 +613,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public String getFavoriteMemoLocation(String title){
+    public String getFavoriteMemoLocation(String title) {
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT " + KEY_LOCATION + " FROM " + TABLE_MEMO + " WHERE " + KEY_LOCATION + " = 1 AND " + KEY_TITLE + " = \"" + title + "\";";
 
         Cursor c = db.rawQuery(query, null);
 
-        if(c.getCount() > 0 && c.moveToFirst() && !c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION))).equals("No location")){
+        if (c.getCount() > 0 && c.moveToFirst() && !c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION))).equals("No location")) {
 
             String location = c.getString(c.getColumnIndexOrThrow(String.valueOf(KEY_LOCATION)));
 
-            db.close();
-
             return location;
 
-        }else {
+        } else {
             return "No location";
         }
 
@@ -659,7 +669,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        db.close();
     }
 
 
