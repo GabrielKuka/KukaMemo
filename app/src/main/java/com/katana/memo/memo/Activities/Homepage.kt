@@ -2,13 +2,10 @@ package com.katana.memo.memo.Activities
 
 import android.Manifest
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.ColorDrawable
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
@@ -22,10 +19,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
-import android.widget.TextView
 import br.com.mauker.materialsearchview.MaterialSearchView
 import com.desai.vatsal.mydynamictoast.MyDynamicToast
 import com.katana.memo.memo.Adapters.HomepageAdapter
@@ -40,7 +35,7 @@ import com.sromku.simple.storage.helpers.OrderType
 import kotlinx.android.synthetic.main.homepage_acitivty.*
 import java.io.File
 
-class Homepage : AppCompatActivity(), RecyclerTouchListener.OnRowLongClickListener, RecyclerTouchListener.OnSwipeOptionsClickListener, RecyclerTouchListener.OnRowClickListener, AdapterView.OnItemClickListener, MaterialSearchView.OnQueryTextListener {
+class Homepage : AppCompatActivity(), RecyclerTouchListener.OnSwipeOptionsClickListener, RecyclerTouchListener.OnRowClickListener, AdapterView.OnItemClickListener, MaterialSearchView.OnQueryTextListener {
 
     val TAG: String = "HomePage"
     lateinit var mAdapter: HomepageAdapter
@@ -157,8 +152,6 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnRowLongClickListen
                 .setSwipeable(true)
                 .setSwipeOptionViews(R.id.edit, R.id.delete)
                 .setSwipeable(R.id.rowFG, R.id.rowBG, this)
-                .setLongClickable(true)
-                .setLongClickable(true, this)
 
 
         addMemoFab.setOnClickListener { bottom_sheet.expandFab() }
@@ -333,7 +326,7 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnRowLongClickListen
         alertDialogBuilder.setMessage("Do you want to delete all the memos?")
                 .setCancelable(false)
                 .setPositiveButton("Yes I do",
-                        DialogInterface.OnClickListener { dialog, id ->
+                       { _, _ ->
                             dbHelper.deleteMemos()
                             mAdapter.reloadRecyclerView(getData())
                             search_view.clearSuggestions()
@@ -341,7 +334,7 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnRowLongClickListen
                             deleteAudios()
                         })
         alertDialogBuilder.setNegativeButton("Nope",
-                DialogInterface.OnClickListener { dialog, id ->
+                { dialog, _ ->
                     run {
                         dialog.cancel()
                     }
@@ -475,23 +468,6 @@ class Homepage : AppCompatActivity(), RecyclerTouchListener.OnRowLongClickListen
 
     }
 
-    override fun onRowLongClicked(position: Int) {
-
-        val itemId = dbHelper.theAmountOfMemos - position
-
-        MyDynamicToast.informationMessage(this, "Triggered")
-        hoverMemoDialog = Dialog(this)
-        hoverMemoDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        hoverMemoDialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        hoverMemoDialog.setContentView(R.layout.hover_memo)
-
-        val hoverTitle: TextView = hoverMemoDialog.findViewById(R.id.hoverMemoTitle) as TextView
-        val hoverBody: TextView = hoverMemoDialog.findViewById(R.id.hoverMemoBody) as TextView
-
-        hoverTitle.text = dbHelper.getSpecificMemoTitle(itemId)
-        hoverBody.text = dbHelper.getSpecificMemoBody(itemId)
-        hoverMemoDialog.show()
-    }
 
     override fun onIndependentViewClicked(independentViewID: Int, position: Int) {
         val itemId = dbHelper.theAmountOfMemos - position
