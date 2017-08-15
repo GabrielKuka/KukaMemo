@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     // Database Name
     private static final String DATABASE_NAME = "user_notes";
@@ -37,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TITLE = "title";
     private static final String KEY_BODY = "body";
     private static final String KEY_FAVORITE = "favorite";
+    private static final String KEY_WIDGET = "widget_id";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_AUDIO = "audio";
     private static final String KEY_DATE = "timestamp";
@@ -48,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + KEY_TITLE + " TEXT,"
             + KEY_FAVORITE + " INTEGER,"
+            + KEY_WIDGET + " INTEGER,"
             + KEY_IMAGE + " TEXT,"
             + KEY_AUDIO + " TEXT,"
             + KEY_DATE + " TEXT,"
@@ -91,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BODY, body);
         values.put(KEY_ID, memoId);
         values.put(KEY_FAVORITE, 0);
+        values.put(KEY_WIDGET, -1);
         values.put(KEY_DATE, getDateTime());
 
         if (location.length() > 0) {
@@ -514,6 +517,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return hasAudio;
+    }
+
+    // Widget methods
+
+    public void setKeyWidget(int Id, int widgetId) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        try {
+            db.execSQL("UPDATE " + TABLE_MEMO + " SET " + KEY_WIDGET + " = " + widgetId + " WHERE " + KEY_ID + " = " + Id);
+            Log.d("WidgetSts", "Added");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.d("WidgetSts", "Failed to add");
+        }
+        db.close();
+    }
+
+    public void removeKeyWidget(int widgetId) {
+        SQLiteDatabase db = getWritableDatabase();
+        int defWidgetId = -1;
+
+        String query = "SELECT " + KEY_WIDGET + " FROM " + TABLE_MEMO + " WHERE " + KEY_WIDGET + " = " + widgetId;
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        if (c.getCount() > 0 && c.getInt(c.getColumnIndexOrThrow(String.valueOf(KEY_WIDGET))) != -1) {
+            try {
+                db.execSQL("UPDATE " + TABLE_MEMO + " SET " + KEY_WIDGET + " = " + defWidgetId + " WHERE " + KEY_WIDGET + " = " + widgetId);
+                Log.d("WidgetSts", "Removed");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Log.d("WidgetSts", "Failed to remove");
+            }
+
+        }
+
+        c.close();
+        db.close();
+    }
+
+    public int getSpecificWidgetId(int Id) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT " + KEY_WIDGET + " FROM " + TABLE_MEMO + " WHERE " + KEY_ID + " = " + Id;
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        if (c.getInt(c.getColumnIndexOrThrow(String.valueOf(KEY_WIDGET))) != -1) {
+            return c.getInt(c.getColumnIndexOrThrow(String.valueOf(KEY_WIDGET)));
+        } else {
+            c.close();
+            db.close();
+            return -1;
+        }
     }
 
     // Favorite notes methods

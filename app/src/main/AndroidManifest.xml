@@ -31,6 +31,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:label">
+        <receiver android:name=".Widgets.SimpleMemoWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/simple_memo_widget_data" />
+        </receiver>
+
         <provider
             android:name="br.com.mauker.materialsearchview.db.HistoryProvider"
             android:authorities="com.katana.memo.memo.app.searchhistorydatabase"
@@ -51,9 +61,7 @@
 
         <activity
             android:name=".Activities.Homepage"
-            android:configChanges="orientation|screenSize"
-
-            >
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -94,14 +102,13 @@
         <activity
             android:name=".Activities.Location"
             android:configChanges="orientation|screenSize" />
-
         <activity
             android:name=".Activities.SearchResults"
             android:configChanges="orientation|screenSize" />
-
         <activity
             android:name=".Activities.ImagePagerView"
             android:configChanges="orientation|screenSize" />
+        <activity android:name=".Activities.AddWidget"></activity>
     </application>
 
 </manifest>

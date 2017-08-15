@@ -1,5 +1,6 @@
 package com.katana.memo.memo.Activities
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -20,6 +21,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RemoteViews
 import com.desai.vatsal.mydynamictoast.MyDynamicToast
 import com.katana.memo.memo.Activities.CreateNoteActivity.Constants.POSITION_CORRECTION
 import com.katana.memo.memo.Helper.*
@@ -922,6 +924,7 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
                 // save memo to the database
                 if (recId != -2) {
                     dbHelper.changeMemo(title, body, recId, imagePaths, audioPaths, memoLocation)
+                    changeWidget(title, body)
                     finish()
                     startActivity(Intent(a, Homepage::class.java))
                 } else {
@@ -936,6 +939,24 @@ class CreateNoteActivity : android.support.v7.app.AppCompatActivity() {
 
             return null
         }
+
+        fun changeWidget(title: String, body: String) {
+
+            val widgetId: Int = dbHelper.getSpecificWidgetId(recId)
+
+            if (widgetId != -1) {
+                a.runOnUiThread {
+
+                    val remoteViews: RemoteViews = RemoteViews(a.packageName, R.layout.widget_memo)
+
+                    remoteViews.setTextViewText(R.id.memoTitleWidget, title)
+                    remoteViews.setTextViewText(R.id.memoBodyWidget, body)
+                    AppWidgetManager.getInstance(a.applicationContext).updateAppWidget(widgetId, remoteViews)
+                    MyDynamicToast.informationMessage(a, "Widget changed")
+                }
+            }
+        }
+
     }
 
 
