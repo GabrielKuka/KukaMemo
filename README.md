@@ -123,6 +123,15 @@ Searching notes inside the app is pretty basic. While typing, the app will show 
 
 &nbsp;
 
+## Widget
+
+#### You can add as many widgets as you want of your registered notes.
+
+<img src="https://user-images.githubusercontent.com/17888328/29356143-964f84ca-8273-11e7-8925-3ce87286077a.png" alt="alt" height="350px" width="200px" >
+
+&nbsp;
+
+
 
 #### Hit me on:
 * [Facebook](https://www.facebook.com/tandisque)
