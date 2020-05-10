@@ -1,9 +1,9 @@
 # Memo
 
-### This application is intended for android app developers. The average user can also use it as well. 
+### Memo application
 &nbsp;
 
-### This is version 1.0 of the app. It might show some FC from time to time.
+### This is version 1.0 of the app. 
 &nbsp;
 
 ## Introduction
