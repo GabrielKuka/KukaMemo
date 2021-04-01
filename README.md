@@ -3,10 +3,6 @@
 ### Memo application
 &nbsp;
 
-### This is version 1.0 of the app. 
-&nbsp;
-
-## Introduction
 <dl>
 <dd>
 <img src="https://user-images.githubusercontent.com/17888328/28576307-e51d7520-7153-11e7-9002-b44c8cce0517.png" alt="alt" height="350px" width="200px" >
@@ -30,8 +26,6 @@
 <dl/>
 </dd>
 
-The main page of the appliaction consists of all the notes saved by the user. Each item in recyclerview shows the title, part of the body, and the type of data added to the note. The user can also add a note to favorites by clicking to the start button on the right of the item.
-
 &nbsp;
 
 ## Create note and Edit page
@@ -47,7 +41,7 @@ The main page of the appliaction consists of all the notes saved by the user. Ea
 </dl>
 </dd>
 
-#### While creating a note a user has the option to:
+#### Features:
 * Add location
 * Add voice
 * Add photos
@@ -105,8 +99,6 @@ The main page of the appliaction consists of all the notes saved by the user. Ea
 </dl>
 </dd>
 
-The note page will show all the info of the note created by the user. Also the data like photos, drawings, voice recordings and location will be displayed there.
-
 &nbsp;
 
 
@@ -119,28 +111,13 @@ The note page will show all the info of the note created by the user. Also the d
 </dl>
 </dd>
 
-Searching notes inside the app is pretty basic. While typing, the app will show suggestions based on what the user is currently typing. The user can also look at a more detailed result after typing enter.
-
 &nbsp;
 
 ## Widget
-
-#### You can add as many widgets as you want of your registered notes.
 
 <img src="https://user-images.githubusercontent.com/17888328/29356143-964f84ca-8273-11e7-8925-3ce87286077a.png" alt="alt" height="350px" width="200px" >
 
 &nbsp;
 
-
-
-#### Hit me on:
-* [Facebook](https://www.facebook.com/tandisque)
-* [LinkedIn](https://www.linkedin.com/in/gabrielkuka)
-* [Google Plus](https://plus.google.com/u/0/100037293339835572316)
-* [Github](https://www.github.com/GabrielKuka)
-
-&nbsp;
-
-#### Email me at: gabrie.kuka@gmail.com
 
 
